@@ -8,20 +8,20 @@ export class YoutubeHistory {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('uuid') // Explicitly specify this is a UUID column
   userId: string;
 
   @ManyToOne(() => User, user => user.youtubeHistories, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ name: 'video_id' })
+  @Column({ name: 'video_id', length: 255 })
   videoId: string;
 
-  @Column()
+  @Column({ length: 500 })
   title: string;
 
-  @Column({ name: 'channel_name' })
+  @Column({ name: 'channel_name', length: 255 })
   channelName: string;
 
   @Column({ name: 'video_date', type: 'date' })

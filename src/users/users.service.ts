@@ -45,7 +45,9 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({ 
+      where: { id: id } // Explicitly cast to satisfy TypeScript
+    });
     
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found`);
@@ -54,12 +56,35 @@ export class UsersService {
     return user;
   }
 
-  async findByUsername(username: string): Promise<User | undefined> {
-    return this.usersRepository.findOne({ where: { username } });
+  async findByUsername(username: string): Promise<User | null> {
+    const user = await this.usersRepository.findOne({ 
+      where: { username: username } 
+    });
+    
+    return user; // This can be null, which is fine for this method
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
+    
+    // Check for unique constraints if email or username is being updated
+    if (updateUserDto.email && updateUserDto.email !== user.email) {
+      const existingUserWithEmail = await this.usersRepository.findOne({
+        where: { email: updateUserDto.email }
+      });
+      if (existingUserWithEmail) {
+        throw new ConflictException('User with this email already exists');
+      }
+    }
+
+    if (updateUserDto.username && updateUserDto.username !== user.username) {
+      const existingUserWithUsername = await this.usersRepository.findOne({
+        where: { username: updateUserDto.username }
+      });
+      if (existingUserWithUsername) {
+        throw new ConflictException('User with this username already exists');
+      }
+    }
     
     // Update user properties
     if (updateUserDto.email) {

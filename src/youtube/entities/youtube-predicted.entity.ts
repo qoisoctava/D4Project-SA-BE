@@ -7,17 +7,17 @@ export class YoutubePredicted {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('uuid') // Explicitly specify this is a UUID column
   historyId: string;
 
   @ManyToOne(() => YoutubeHistory, history => history.predictions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'historyId' })
   history: YoutubeHistory;
 
-  @Column()
+  @Column({ length: 500 })
   title: string;
 
-  @Column({ name: 'channel_name' })
+  @Column({ name: 'channel_name', length: 255 })
   channelName: string;
 
   @Column({ name: 'video_date', type: 'date' })
@@ -32,7 +32,7 @@ export class YoutubePredicted {
   @Column({ name: 'like_count', default: 0 })
   likeCount: number;
 
-  @Column()
+  @Column({ length: 255 })
   commentator: string;
 
   @Column({
@@ -41,7 +41,7 @@ export class YoutubePredicted {
   })
   sentiment: SentimentType;
 
-  @Column()
+  @Column({ length: 255 })
   topic: string;
 
   @CreateDateColumn({ name: 'get_date' })

@@ -12,20 +12,20 @@ export class TwitterPredicted {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('uuid') // Explicitly specify this is a UUID column
   historyId: string;
 
   @ManyToOne(() => TwitterHistory, history => history.predictions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'historyId' })
   history: TwitterHistory;
 
-  @Column()
+  @Column({ length: 255 })
   keyword: string;
 
   @Column({ name: 'content_date', type: 'datetime' })
   contentDate: Date;
 
-  @Column()
+  @Column({ length: 255 })
   username: string;
 
   @Column({ type: 'text' })
@@ -49,7 +49,7 @@ export class TwitterPredicted {
   })
   sentiment: SentimentType;
 
-  @Column()
+  @Column({ length: 255 })
   topic: string;
 
   @CreateDateColumn({ name: 'get_date' })

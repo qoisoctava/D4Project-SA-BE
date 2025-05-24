@@ -15,14 +15,14 @@ export class TwitterHistory {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('uuid') // Explicitly specify this is a UUID column
   userId: string;
 
   @ManyToOne(() => User, user => user.twitterHistories, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column()
+  @Column({ length: 255 })
   keyword: string;
 
   @Column({ name: 'since_date', type: 'date' })
