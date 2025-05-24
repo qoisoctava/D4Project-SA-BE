@@ -26,8 +26,6 @@ export class TwitterService {
 
     const savedAnalysis = await this.twitterHistoryRepository.save(analysis);
 
-    // Here you would typically trigger your external sentiment analysis service
-    // For now, we'll just return the created analysis
     return savedAnalysis;
   }
 
